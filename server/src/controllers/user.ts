@@ -1,23 +1,30 @@
 import {Request, Response} from 'express';
+import bcrypt from 'bcrypt';
+import { User } from '../moddels/users';
+export const newUser = async (req: Request, res: Response)=> { 
 
-export const newUser = (req: Request, res: Response)=> { 
+const {username, password} =req.body;
 
-console.log(req.body);
+const hashedpassword = await bcrypt.hash(password, 10 )
 
+await User.create({
+username: username,
+password:hashedpassword
+})
 res.json ({
-    msg: 'New user',
-    body: req.body
+    msg: `usuario ${username} creado exitosamente`,
+     
 })
 
 }
 
 export const loginUser = (req: Request, res: Response)=> { 
 
-    console.log(req.body);
-    
+    const {body} =req;
+
     res.json ({
         msg: 'Login user',
-        body: req.body
+        body
     })
     
     }
